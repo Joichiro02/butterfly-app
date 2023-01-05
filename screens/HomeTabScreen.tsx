@@ -4,7 +4,6 @@ import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-import Pages from "./home/Pages";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -13,6 +12,11 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Follow from "./home/Follow";
+import MainPage from "./home/MainPage";
+import Moment from "./home/Moment";
+import Date from "./home/Date";
+import Photography from "./home/Photography";
 
 const mainTopNavigation = ["关注", "首页", "动态", "约会", "写真"];
 
@@ -21,6 +25,7 @@ const { width } = Dimensions.get("window");
 export default function HomeTabScreen({
   navigation,
 }: RootTabScreenProps<"HomeTab">) {
+  const [enabled, setEnabled] = useState(true);
   const [activeText, setActiveText] = useState(1);
   const scrollViewRef = useRef(null);
   const activePage = useSharedValue(1);
@@ -44,6 +49,7 @@ export default function HomeTabScreen({
                 scrollViewRef={scrollViewRef}
                 activeText={activeText}
                 setActiveText={setActiveText}
+                setEnabled={setEnabled}
               />
             ))}
           </View>
@@ -53,6 +59,7 @@ export default function HomeTabScreen({
           </TouchableOpacity>
         </View>
         <Animated.ScrollView
+          scrollEnabled={enabled}
           horizontal
           pagingEnabled
           onScroll={scrollHandler}
@@ -61,11 +68,12 @@ export default function HomeTabScreen({
           ref={scrollViewRef}
         >
           {mainTopNavigation.map((item: any, index: number) => (
-            <Pages
+            <HomePages
               key={index}
               title={item}
               number={index}
               activePage={activePage}
+              setEnabled={setEnabled}
             />
           ))}
         </Animated.ScrollView>
@@ -81,10 +89,12 @@ const NavigationTitle = ({
   scrollViewRef,
   activeText,
   setActiveText,
+  setEnabled,
 }: any) => {
   const handleScroll = () => {
     scrollViewRef?.current.scrollTo({ x: index * width, y: 0, animated: true });
     setActiveText(index);
+    setEnabled(true);
   };
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -119,6 +129,26 @@ const NavigationTitle = ({
       </Animated.View>
     </TouchableOpacity>
   );
+};
+
+const HomePages = ({ title, number, activePage, setEnabled }: any) => {
+  //"关注", "首页", "动态", "约会", "写真"
+  const pages = {
+    关注: <Follow title={title} number={number} activePage={activePage} />,
+    首页: (
+      <MainPage
+        title={title}
+        number={number}
+        activePage={activePage}
+        setEnabled={setEnabled}
+      />
+    ),
+    动态: <Moment title={title} number={number} activePage={activePage} />,
+    约会: <Date title={title} number={number} activePage={activePage} />,
+    写真: <Photography title={title} number={number} activePage={activePage} />,
+  };
+  //@ts-ignore
+  return pages[title];
 };
 
 const styles = StyleSheet.create({

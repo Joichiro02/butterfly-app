@@ -3,8 +3,8 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 const { height, width } = Dimensions.get("window");
 
-const Pages = ({ title, number, activePage }: any) => {
-  console.log(activePage.value);
+const Date = ({ title, number, activePage }: any) => {
+  // console.log(activePage.value);
   return (
     <View
       style={[
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Pages;
+export default Date;
