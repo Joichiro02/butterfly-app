@@ -6,15 +6,8 @@ const { height, width } = Dimensions.get("window");
 const Moment = ({ title, number, activePage }: any) => {
   // console.log(activePage.value);
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: `rgba(0,0,256,0.${number + 2})` },
-      ]}
-    >
-      <Text style={styles.title}>
-        {title}- {number}
-      </Text>
+    <View style={[styles.container, { backgroundColor: "pink" }]}>
+      <Text style={styles.title}>Moment</Text>
     </View>
   );
 };

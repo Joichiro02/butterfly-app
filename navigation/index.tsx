@@ -41,12 +41,14 @@ export default function Navigation({
   colorScheme: ColorSchemeName;
 }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-    >
-      <RootNavigator />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+      >
+        <RootNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
@@ -58,23 +60,21 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <SafeAreaProvider>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Root"
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NotFound"
-          component={NotFoundScreen}
-          options={{ title: "Oops!" }}
-        />
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
-          <Stack.Screen name="Modal" component={ModalScreen} />
-        </Stack.Group>
-      </Stack.Navigator>
-    </SafeAreaProvider>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen name="Modal" component={ModalScreen} />
+      </Stack.Group>
+    </Stack.Navigator>
   );
 }
 
